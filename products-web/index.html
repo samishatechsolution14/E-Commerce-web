@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ShopSphere</title>
+    <style>
+        :root {
+            --bg: #f6f7fb;
+            --card: #fff;
+            --ink: #14161c;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --brand: #5b4bff;
+            --brand-ink: #fff;
+            --good: #0a8a4a;
+            --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 6px 20px rgba(20, 22, 28, .06)
+        }
+
+        @media (prefers-color-scheme:dark) {
+            :root {
+                --bg: #0f1115;
+                --card: #171a21;
+                --ink: #eef0f4;
+                --muted: #9aa3b2;
+                --line: #262b36;
+                --brand: #8b7dff;
+                --brand-ink: #0f1115;
+                --good: #3ad17f;
+                --shadow: 0 1px 2px rgba(0, 0, 0, .5)
+            }
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, sans-serif
+        }
+
+        .top {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: var(--card);
+            border-bottom: 1px solid var(--line);
+            padding: 12px 16px
+        }
+
+        .top-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1280px;
+            margin: 0 auto
+        }
+
+        .logo {
+            font-size: 20px;
+            margin: 0;
+            white-space: nowrap
+        }
+
+        .search {
+            flex: 1;
+            min-width: 180px;
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--ink);
+            font: inherit
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: var(--brand);
+            color: var(--brand-ink);
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--ink);
+            border: 1px solid var(--line)
+        }
+
+        .btn:hover {
+            filter: brightness(1.06)
+        }
+
+        .pill {
+            background: var(--brand-ink);
+            color: var(--brand);
+            border-radius: 99px;
+            padding: 0 8px;
+            margin-left: 4px;
+            font-size: 12px
+        }
+
+        .chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px 0 4px;
+            max-width: 1280px;
+            margin: 0 auto
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--ink);
+            border-radius: 99px;
+            padding: 6px 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            font: inherit
+        }
+
+        .chip.on {
+            background: var(--brand);
+            color: var(--brand-ink);
+            border-color: var(--brand)
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            max-width: 1280px;
+            margin: 6px auto 0;
+            font-size: 13px
+        }
+
+        .toolbar .muted {
+            margin-right: auto
+        }
+
+        .toolbar select {
+            margin-left: 6px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--bg);
+            color: var(--ink)
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 14px
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform .12s
+        }
+
+        .card:hover {
+            transform: translateY(-2px)
+        }
+
+        .thumb {
+            position: relative;
+            aspect-ratio: 1/1;
+            background: linear-gradient(135deg, rgba(91, 75, 255, .10), rgba(91, 75, 255, .02));
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .thumb .emoji {
+            font-size: 64px
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--good);
+            color: #fff;
+            border-radius: 6px;
+            padding: 2px 7px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .badge.mine {
+            left: auto;
+            right: 8px;
+            background: var(--brand);
+            color: var(--brand-ink)
+        }
+
+        .info {
+            padding: 10px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1
+        }
+
+        .brand {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .04em
+        }
+
+        .info h3 {
+            font-size: 14px;
+            margin: 0;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.8em
+        }
+
+        .rate {
+            font-size: 13px;
+            color: var(--good)
+        }
+
+        .rate span {
+            color: var(--muted)
+        }
+
+        .price {
+            font-weight: 700;
+            font-size: 16px
+        }
+
+        .price s {
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--muted);
+            margin-left: 4px
+        }
+
+        .info .btn {
+            margin-top: auto;
+            padding: 8px 10px;
+            font-size: 14px
+        }
+
+        .more {
+            text-align: center;
+            padding: 20px
+        }
+
+        .empty {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 0;
+            color: var(--muted)
+        }
+
+        .modal {
+            border: 0;
+            border-radius: 16px;
+            padding: 0;
+            max-width: 760px;
+            width: calc(100% - 24px);
+            background: var(--card);
+            color: var(--ink);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .35)
+        }
+
+        .modal::backdrop {
+            background: rgba(0, 0, 0, .5)
+        }
+
+        .detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            padding: 20px
+        }
+
+        @media(max-width:640px) {
+            .detail {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .detail .thumb {
+            border-radius: 12px
+        }
+
+        .detail .thumb .emoji {
+            font-size: 110px
+        }
+
+        .detail h2 {
+            margin: 4px 0 6px;
+            font-size: 20px
+        }
+
+        .detail .price {
+            font-size: 22px;
+            margin: 8px 0
+        }
+
+        .detail table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 13px;
+            margin-top: 10px
+        }
+
+        .detail td {
+            padding: 5px 0;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top
+        }
+
+        .detail td:first-child {
+            color: var(--muted);
+            width: 42%
+        }
+
+        .upload {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px dashed var(--line);
+            border-radius: 10px;
+            font-size: 13px
+        }
+
+        .upload input {
+            display: block;
+            margin-top: 6px;
+            max-width: 100%
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap
+        }
+
+        .x {
+            border: 0;
+            background: transparent;
+            color: var(--ink);
+            font-size: 18px;
+            cursor: pointer
+        }
+
+        .form {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .form h2 {
+            margin: 0
+        }
+
+        .form label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .form input,
+        .form select,
+        .form textarea {
+            padding: 9px 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--ink);
+            font: inherit
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px
+        }
+
+        .preview img {
+            max-width: 140px;
+            border-radius: 10px
+        }
+
+        .cart {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: min(380px, 100%);
+            background: var(--card);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, .25);
+            transform: translateX(105%);
+            transition: transform .22s;
+            z-index: 40;
+            display: flex;
+            flex-direction: column
+        }
+
+        .cart.open {
+            transform: none
+        }
+
+        .cart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .cart-head h2 {
+            margin: 0;
+            font-size: 18px
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow: auto;
+            padding: 8px 16px
+        }
+
+        .ci {
+            display: grid;
+            grid-template-columns: 52px 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .ci .t {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            background: var(--bg);
+            display: grid;
+            place-items: center;
+            font-size: 28px;
+            overflow: hidden
+        }
+
+        .ci .t img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .ci .n {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .qty {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px
+        }
+
+        .qty button {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer
+        }
+
+        .cart-foot {
+            padding: 14px 16px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px
+        }
+
+        .scrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+            z-index: 30
+        }
+
+        .scrim.on {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translate(-50%, 20px);
+            background: var(--ink);
+            color: var(--bg);
+            padding: 10px 16px;
+            border-radius: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .2s;
+            z-index: 60
+        }
+
+        .toast.on {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div class="top-row">
+            <h1 class="logo">🛍️ ShopSphere</h1>
+            <input id="q" class="search" type="search" placeholder="Search 2000+ products, brands, phones…"
+                autocomplete="off">
+            <button id="openAdd" class="btn ghost" type="button">＋ Add product</button>
+            <button id="openCart" class="btn" type="button">🛒 Cart <span id="cartCount" class="pill">0</span></button>
+        </div>
+        <nav id="chips" class="chips" aria-label="Categories"></nav>
+        <div class="toolbar">
+            <span id="count" class="muted"></span>
+            <label>Price
+                <select id="price">
+                    <option value="0-Infinity">Any</option>
+                    <option value="0-500">Under ₹500</option>
+                    <option value="500-2000">₹500 – ₹2,000</option>
+                    <option value="2000-10000">₹2,000 – ₹10,000</option>
+                    <option value="10000-50000">₹10,000 – ₹50,000</option>
+                    <option value="50000-Infinity">Above ₹50,000</option>
+                </select>
+            </label>
+            <label>Sort
+                <select id="sort">
+                    <option value="featured">Featured</option>
+                    <option value="low">Price: Low to High</option>
+                    <option value="high">Price: High to Low</option>
+                    <option value="rating">Top rated</option>
+                    <option value="discount">Biggest discount</option>
+                </select>
+            </label>
+        </div>
+    </header>
+
+    <main>
+        <section id="grid" class="grid"></section>
+        <div class="more"><button id="more" class="btn ghost" type="button">Load more</button></div>
+    </main>
+
+    <dialog id="detail" class="modal"></dialog>
+
+    <dialog id="addDlg" class="modal">
+        <form id="addForm" method="dialog" class="form">
+            <h2>Add your own product</h2>
+            <label>Title *<input name="title" required maxlength="120"></label>
+            <label>Brand<input name="brand" maxlength="60" placeholder="Optional"></label>
+            <label>Category *
+                <select name="category" required id="addCat"></select>
+            </label>
+            <div class="two">
+                <label>Price (₹) *<input name="price" type="number" min="1" step="1" required></label>
+                <label>Old price (₹)<input name="oldPrice" type="number" min="1" step="1"></label>
+            </div>
+            <label>Description<textarea name="description" rows="3" maxlength="500"></textarea></label>
+            <label>Your image <small>(optional)</small><input name="image" type="file" accept="image/*"></label>
+            <div id="addPreview" class="preview"></div>
+            <div class="actions">
+                <button type="button" class="btn ghost" id="addCancel">Cancel</button>
+                <button type="submit" class="btn">Save product</button>
+            </div>
+        </form>
+    </dialog>
+
+    <aside id="cart" class="cart" aria-label="Cart">
+        <div class="cart-head">
+            <h2>Your cart</h2><button id="closeCart" class="x" aria-label="Close cart">✕</button>
+        </div>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="cart-foot">
+            <div class="total"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+            <button id="clearCart" class="btn ghost" type="button">Clear cart</button>
+            <button id="checkout" class="btn" type="button">Checkout (demo)</button>
+        </div>
+    </aside>
+    <div id="scrim" class="scrim"></div>
+    <div id="toast" class="toast" role="status"></div>
+
+    <script>
+
+        const categories = ['All', 'Mobiles', 'Electronics', 'Food', 'Fashion', 'Beauty', 'Home', 'Others'];
+
+        const seed = [
+            { id: 'p1', title: 'Classic Cheeseburger Combo', brand: 'Burger House', category: 'Food', price: 249, oldPrice: 329, rating: 4.5, reviews: 1280, emoji: '🍔', description: 'Juicy grilled patty, fresh lettuce, tomato, cheese and crispy fries. Prepared fresh to order.', specs: { 'Type': 'Combo meal', 'Serving': '1 person', 'Diet': 'Contains dairy and gluten', 'Delivery': 'Usually 25–40 min' } },
+            { id: 'p2', title: 'Pepperoni Pizza', brand: 'Oven Stories', category: 'Food', price: 399, oldPrice: 499, rating: 4.4, reviews: 842, emoji: '🍕', description: 'Stone-baked pizza with mozzarella, pepperoni and a rich tomato sauce.', specs: { 'Size': 'Medium, 8 slices', 'Crust': 'Classic hand-tossed', 'Diet': 'Contains dairy and gluten' } },
+            { id: 'p3', title: 'Hydrating Face Moisturizer', brand: 'GlowLab', category: 'Beauty', price: 499, oldPrice: 699, rating: 4.6, reviews: 2350, emoji: '🧴', description: 'Lightweight daily moisturizer designed to leave skin feeling soft and hydrated.', specs: { 'Volume': '100 ml', 'Skin type': 'Normal to dry', 'Usage': 'AM / PM', 'Country of origin': 'India' } },
+            { id: 'p4', title: 'Matte Lipstick Set', brand: 'ColorPop', category: 'Beauty', price: 799, oldPrice: 999, rating: 4.2, reviews: 619, emoji: '💄', description: 'A set of versatile matte shades for everyday wear and special occasions.', specs: { 'Pieces': '4', 'Finish': 'Matte', 'Form': 'Cream' } },
+            { id: 'p5', title: 'Wireless Noise-Cancelling Headphones', brand: 'SoundPeak', category: 'Electronics', price: 2499, oldPrice: 3499, rating: 4.7, reviews: 4321, emoji: '🎧', description: 'Comfortable over-ear headphones with rich sound, wireless connectivity and active noise reduction.', specs: { 'Connectivity': 'Bluetooth 5.x', 'Battery': 'Up to 30 hours (claimed)', 'Charging': 'USB-C', 'Warranty': '1 year (check seller terms)' } },
+            { id: 'p6', title: 'Smartphone 128 GB', brand: 'Nova Mobile', category: 'Mobiles', price: 18999, oldPrice: 21999, rating: 4.3, reviews: 1850, emoji: '📱', description: 'A daily-use smartphone with a vivid display, multi-camera system and all-day battery target.', specs: { 'Storage': '128 GB', 'Display': '6.5 inch (example)', 'Connectivity': '4G/5G varies by model', 'Warranty': 'Manufacturer terms apply' } },
+            { id: 'p7', title: 'Everyday Running Shoes', brand: 'Stride', category: 'Fashion', price: 1599, oldPrice: 2299, rating: 4.1, reviews: 905, emoji: '👟', description: 'Lightweight everyday trainers with a cushioned sole for walking and casual workouts.', specs: { 'Upper': 'Mesh textile', 'Closure': 'Lace-up', 'Care': 'Wipe clean' } },
+            { id: 'p8', title: 'Insulated Travel Bottle', brand: 'Terra', category: 'Home', price: 699, oldPrice: 899, rating: 4.5, reviews: 742, emoji: '🧃', description: 'Reusable bottle for commuting, travel and everyday hydration.', specs: { 'Capacity': '750 ml', 'Material': 'Stainless steel', 'Care': 'Hand wash recommended' } },
+        ];
+
+        function buildCatalog() {
+            function rng(s) { return function () { s |= 0; s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+            const rand = rng(20261011);
+            const pick = (a) => a[Math.floor(rand() * a.length)];
+            const sample = (a, n) => { const c = [...a], o = []; while (o.length < n && c.length) o.push(c.splice(Math.floor(rand() * c.length), 1)[0]); return o; };
+            const tidy = (p) => p < 100 ? Math.max(9, Math.round(p / 5) * 5 - 1) : p < 1000 ? Math.round(p / 10) * 10 - 1 : p < 10000 ? Math.round(p / 50) * 50 - 1 : Math.round(p / 500) * 500 - 1;
+
+            const out = [];
+            let n = 0;
+            function add(o) {
+                const price = tidy(o.price);
+                let old = tidy(price * (1.08 + rand() * 0.35));
+                if (old <= price) old = tidy(price * 1.2) + 1;
+                out.push({
+                    id: 'g' + (++n), title: o.title, brand: o.brand, category: o.category,
+                    price, oldPrice: old, rating: +(3.6 + rand() * 1.3).toFixed(1),
+                    reviews: Math.floor(20 + rand() * rand() * 9000),
+                    emoji: o.emoji, description: o.description, specs: o.specs,
+                });
+            }
+
+            function fromTypes(category, brands, types, opts = {}) {
+                const series = ['Lite', 'Pro', 'Plus', 'Air', 'Max', 'One', 'Neo', 'S', 'X', 'Prime'];
+                for (const [name, emoji, lo, hi, desc, specs, variants, vk] of types) {
+                    for (const brand of brands) {
+                        const base = lo + (hi - lo) * Math.pow(rand(), 1.4);
+                        const chosen = sample(variants, Math.min(variants.length, opts.perVariant || 2));
+                        for (const [label, mult] of chosen) {
+                            const spec = { Brand: brand };
+                            for (const k in specs) spec[k] = pick(specs[k]);
+                            if (vk && label) spec[vk] = label;
+                            const model = opts.model ? ' ' + pick(series) : '';
+                            add({
+                                title: `${brand}${model} ${name}${label ? ' (' + label + ')' : ''}`,
+                                brand, category, emoji, price: base * mult, description: desc, specs: spec,
+                            });
+                        }
+                    }
+                }
+            }
+
+            const COLORS = [['Black', 1], ['White', 1], ['Blue', 1], ['Grey', 1], ['Green', 1], ['Red', 1]];
+            const SIZES_CLOTH = [['S', 1], ['M', 1], ['L', 1], ['XL', 1.03], ['XXL', 1.06]];
+
+            const phones = `
+Apple|iPhone 17 Pro Max|149900|12/256,12/512,12/1024|5G
+Apple|iPhone 17 Pro|134900|12/256,12/512,12/1024|5G
+Apple|iPhone Air|119900|12/256,12/512,12/1024|5G
+Apple|iPhone 17|82900|8/256,8/512|5G
+Apple|iPhone 16e|59900|8/128,8/256,8/512|5G
+Apple|iPhone 16 Plus|89900|8/128,8/256,8/512|5G
+Apple|iPhone 16|79900|8/128,8/256,8/512|5G
+Apple|iPhone 15|69900|6/128,6/256,6/512|5G
+Apple|iPhone 14|59900|6/128,6/256,6/512|5G
+Apple|iPhone 13|49900|4/128,4/256,4/512|5G
+Apple|iPhone SE (3rd gen)|43900|4/64,4/128,4/256|5G
+Samsung|Galaxy S25 Ultra|129999|12/256,12/512,12/1024|5G
+Samsung|Galaxy S25+|99999|12/256,12/512|5G
+Samsung|Galaxy S25|80999|12/128,12/256,12/512|5G
+Samsung|Galaxy S25 Edge|109999|12/256,12/512|5G
+Samsung|Galaxy S25 FE|59999|8/128,8/256|5G
+Samsung|Galaxy S24 Ultra|109999|12/256,12/512,12/1024|5G
+Samsung|Galaxy S24 FE|54999|8/128,8/256|5G
+Samsung|Galaxy Z Fold7|174999|12/256,12/512,16/1024|5G
+Samsung|Galaxy Z Flip7|109999|12/256,12/512|5G
+Samsung|Galaxy Z Flip7 FE|89999|8/128,8/256|5G
+Samsung|Galaxy A56 5G|41999|8/128,8/256|5G
+Samsung|Galaxy A36 5G|33999|8/128,8/256|5G
+Samsung|Galaxy A26 5G|24999|8/128,8/256|5G
+Samsung|Galaxy A17 5G|18999|6/128,8/256|5G
+Samsung|Galaxy A07|8999|4/64,4/128,6/128|4G
+Samsung|Galaxy M36 5G|22999|6/128,8/128,8/256|5G
+Samsung|Galaxy M16 5G|12999|4/128,6/128,8/128|5G
+Samsung|Galaxy M06 5G|9999|4/128,6/128|5G
+Samsung|Galaxy F36 5G|17999|6/128,8/128,8/256|5G
+Samsung|Galaxy F16 5G|13999|4/128,6/128|5G
+Xiaomi|Xiaomi 15 Ultra|109999|16/512,16/1024|5G
+Xiaomi|Xiaomi 15|64999|12/256,12/512|5G
+Xiaomi|Xiaomi 14T Pro|44999|12/256,12/512|5G
+Xiaomi|Xiaomi 14T|32999|8/256,12/256|5G
+Redmi|Redmi Note 14 Pro+ 5G|29999|8/128,8/256,12/512|5G
+Redmi|Redmi Note 14 Pro 5G|24999|8/128,8/256,12/256|5G
+Redmi|Redmi Note 14 5G|17999|6/128,8/128,8/256|5G
+Redmi|Redmi Note 13 Pro+ 5G|31999|8/256,12/256,12/512|5G
+Redmi|Redmi 14C 5G|10999|4/128,6/128,8/128|5G
+Redmi|Redmi 13 5G|13999|6/128,8/128,8/256|5G
+Redmi|Redmi A4 5G|8499|4/64,4/128|5G
+POCO|POCO F7|31999|12/256,12/512|5G
+POCO|POCO F6|29999|8/256,12/512|5G
+POCO|POCO X7 Pro 5G|27999|8/256,12/256,12/512|5G
+POCO|POCO X7 5G|21999|8/256,12/256|5G
+POCO|POCO M7 Pro 5G|14999|6/128,8/128,8/256|5G
+POCO|POCO M7 Plus 5G|12999|6/128,8/128|5G
+POCO|POCO C75 5G|7999|4/64,4/128,6/128|5G
+Realme|Realme GT 7 Pro|59999|12/256,16/512|5G
+Realme|Realme GT 7|39999|8/256,12/256,16/512|5G
+Realme|Realme 15 Pro 5G|31999|8/128,8/256,12/256|5G
+Realme|Realme 15 5G|25999|8/128,8/256,12/256|5G
+Realme|Realme 14 Pro+ 5G|29999|8/128,8/256,12/256|5G
+Realme|Realme 14 Pro 5G|24999|8/128,8/256|5G
+Realme|Realme 14x 5G|14999|6/128,8/128,8/256|5G
+Realme|Realme Narzo 80 Pro 5G|19999|8/128,8/256,12/256|5G
+Realme|Realme Narzo 80x 5G|13999|6/128,8/128|5G
+Realme|Realme P3 Pro 5G|23999|8/128,8/256,12/256|5G
+Realme|Realme P3 5G|17999|6/128,8/128,8/256|5G
+Realme|Realme C71|6999|4/64,4/128|4G
+OnePlus|OnePlus 15|72999|12/256,16/512|5G
+OnePlus|OnePlus 13|69999|12/256,16/512,24/1024|5G
+OnePlus|OnePlus 13s|54999|12/256,12/512|5G
+OnePlus|OnePlus 13R|42999|12/256,16/512|5G
+OnePlus|OnePlus 12|64999|12/256,16/512|5G
+OnePlus|OnePlus Nord 5|31999|8/256,12/256,12/512|5G
+OnePlus|OnePlus Nord 4|29999|8/128,8/256,12/256|5G
+OnePlus|OnePlus Nord CE5|24999|8/128,8/256|5G
+OnePlus|OnePlus Nord CE4 Lite 5G|16999|8/128,8/256|5G
+Vivo|Vivo X Fold5|149999|16/512|5G
+Vivo|Vivo X200 Pro|94999|16/512|5G
+Vivo|Vivo X200|65999|12/256,16/512|5G
+Vivo|Vivo X200 FE|54999|12/256,16/512|5G
+Vivo|Vivo V60 5G|36999|8/128,8/256,12/256|5G
+Vivo|Vivo V50 5G|34999|8/128,8/256,12/512|5G
+Vivo|Vivo V40 Pro|49999|8/256,12/512|5G
+Vivo|Vivo V40|34999|8/128,8/256,12/512|5G
+Vivo|Vivo T4 Ultra|37999|8/256,12/256,12/512|5G
+Vivo|Vivo T4 5G|21999|8/128,8/256|5G
+Vivo|Vivo T4x 5G|13999|6/128,8/128,8/256|5G
+Vivo|Vivo Y400 Pro|24999|8/128,8/256|5G
+Vivo|Vivo Y29 5G|13999|4/128,6/128,8/128|5G
+Vivo|Vivo Y19 5G|10999|4/64,4/128,6/128|5G
+Oppo|Oppo Find N5|149999|16/512|5G
+Oppo|Oppo Find X8 Pro|99999|16/512|5G
+Oppo|Oppo Find X8|69999|12/256,16/512|5G
+Oppo|Oppo Reno14 Pro 5G|49999|12/256,12/512|5G
+Oppo|Oppo Reno14 5G|37999|8/256,12/256,12/512|5G
+Oppo|Oppo Reno13 Pro 5G|44999|12/256,12/512|5G
+Oppo|Oppo Reno13 5G|37999|8/256,12/256|5G
+Oppo|Oppo F29 Pro 5G|27999|8/128,8/256,12/256|5G
+Oppo|Oppo F29 5G|23999|8/128,8/256|5G
+Oppo|Oppo K13 5G|17999|8/128,8/256|5G
+Oppo|Oppo A5 Pro 5G|17999|6/128,8/128,8/256|5G
+Oppo|Oppo A5x 5G|12999|4/128,6/128|5G
+Google|Pixel 10 Pro XL|124999|16/256,16/512,16/1024|5G
+Google|Pixel 10 Pro|109999|16/256,16/512,16/1024|5G
+Google|Pixel 10|79999|12/256,12/512|5G
+Google|Pixel 9 Pro Fold|172999|16/256,16/512|5G
+Google|Pixel 9a|49999|8/128,8/256|5G
+Google|Pixel 8a|52999|8/128,8/256|5G
+Motorola|Razr 60 Ultra|99999|16/512|5G
+Motorola|Razr 60|49999|8/256|5G
+Motorola|Edge 60 Pro|29999|8/256,12/256,12/512|5G
+Motorola|Edge 60 Fusion|22999|8/256,12/256|5G
+Motorola|Edge 60 Stylus|22999|8/256|5G
+Motorola|Moto G96 5G|17999|8/128,8/256|5G
+Motorola|Moto G86 Power 5G|17999|8/128,8/256|5G
+Motorola|Moto G85 5G|17999|8/128,8/256|5G
+Motorola|Moto G45 5G|10999|4/128,8/128|5G
+Motorola|Moto G05|6999|4/64,4/128|4G
+Nothing|Nothing Phone (3)|79999|12/256,16/512|5G
+Nothing|Nothing Phone (3a) Pro|29999|8/128,8/256,12/256|5G
+Nothing|Nothing Phone (3a)|24999|8/128,8/256,12/256|5G
+Nothing|Nothing Phone (2a)|23999|8/128,8/256,12/256|5G
+Nothing|CMF Phone 2 Pro|18999|8/128,8/256|5G
+Nothing|CMF Phone 1|15999|6/128,8/128,8/256|5G
+iQOO|iQOO 13|54999|12/256,16/512|5G
+iQOO|iQOO 12|52999|12/256,16/512|5G
+iQOO|iQOO Neo 10|33999|8/128,8/256,12/256|5G
+iQOO|iQOO Neo 10R|26999|8/128,8/256,12/256|5G
+iQOO|iQOO Z10|21999|8/128,8/256|5G
+iQOO|iQOO Z10R 5G|19499|8/128,8/256|5G
+iQOO|iQOO Z10x|13499|6/128,8/128,8/256|5G
+Tecno|Tecno Pova 7 5G|14999|8/128,8/256|5G
+Tecno|Tecno Pova 6 Pro 5G|21999|8/128,8/256,12/256|5G
+Infinix|Infinix GT 30 Pro 5G|24999|8/256,12/256|5G
+Infinix|Infinix Zero 40 5G|24999|8/256,12/256|5G
+Infinix|Infinix Note 50x 5G|11499|6/128,8/128,8/256|5G
+Infinix|Infinix Hot 60 5G+|11999|4/128,6/128,8/128|5G
+Lava|Lava Agni 3 5G|20999|8/128,8/256|5G
+Lava|Lava Blaze AMOLED 2 5G|14999|6/128,8/128|5G
+Lava|Lava Storm 5G|12999|6/128,8/128|5G
+Lava|Lava Yuva Star 2|6999|4/64,4/128|4G
+Lava|Lava Bold N1|5999|3/64,4/64|4G
+Sony|Sony Xperia 1 VII|139999|12/256,12/512|5G
+Sony|Sony Xperia 10 VII|49999|8/128,8/256|5G
+Asus|Asus ROG Phone 9 Pro|99999|16/512,24/1024|5G
+Asus|Asus Zenfone 12 Ultra|69999|12/256,16/512|5G
+Nokia|Nokia 110 4G|2299|—|4G
+Nokia|Nokia 105 (2024)|1299|—|2G
+Nokia|Nokia 130 Music|1999|—|2G
+Itel|Itel Super Guru 4G|1399|—|4G
+Jio|JioBharat J1 4G|1799|—|4G`.trim().split('\n');
+
+            const PHONE_COLORS = ['Midnight Black', 'Ocean Blue', 'Silver', 'Titanium Grey', 'Mint Green', 'Lavender', 'Pearl White', 'Desert Gold', 'Crimson Red'];
+            const STEP = [1, 1.12, 1.28, 1.5];
+            for (const line of phones) {
+                const [brand, model, base, vars, net] = line.split('|');
+                const variants = vars === '—' ? [null] : vars.split(',');
+                variants.forEach((v, i) => {
+                    for (const color of sample(PHONE_COLORS, vars === '—' ? 1 : 2)) {
+                        const spec = { Brand: brand, Model: model, Network: net };
+                        if (v) { const [ram, sto] = v.split('/'); spec['RAM'] = ram + ' GB'; spec['Storage'] = (sto === '1024' ? '1 TB' : sto + ' GB'); }
+                        spec['Colour'] = color;
+                        spec['Warranty'] = 'Manufacturer terms apply';
+                        add({
+                            title: `${model}${v ? ' (' + v.split('/')[0] + 'GB/' + (v.split('/')[1] === '1024' ? '1TB' : v.split('/')[1] + 'GB') + ')' : ''} – ${color}`,
+                            brand, category: 'Mobiles', emoji: '📱', price: +base * STEP[i],
+                            description: `${model} from ${brand}. ${net === '5G' ? '5G-ready smartphone.' : net === '4G' ? '4G smartphone.' : 'Basic feature phone for calls and everyday use.'} Check the brand site for full specifications.`,
+                            specs: spec,
+                        });
+                    }
+                });
+            }
+
+            const EBR = ['SoundPeak', 'VoltEdge', 'NovaTech', 'ZenWave', 'PixelCraft', 'ByteCore', 'Aurion', 'Lumio', 'TechNest', 'Orbit One'];
+            const conn = ['Bluetooth 5.3', 'Bluetooth 5.4'];
+            fromTypes('Electronics', EBR, [
+                ['Wireless Earbuds', '🎧', 799, 9999, 'True wireless earbuds with a compact charging case and clear calling.', { Connectivity: conn, Battery: ['Up to 24 h (claimed)', 'Up to 30 h (claimed)', 'Up to 40 h (claimed)'], ANC: ['Yes', 'No'], Charging: ['USB-C'] }, COLORS, 'Colour'],
+                ['Over-ear Headphones', '🎧', 1299, 19999, 'Comfortable over-ear headphones with rich sound.', { Connectivity: conn, Battery: ['Up to 30 h (claimed)', 'Up to 50 h (claimed)'], ANC: ['Yes', 'No'], Charging: ['USB-C'] }, COLORS, 'Colour'],
+                ['Neckband Earphones', '🎧', 499, 2499, 'Lightweight wireless neckband with fast charging.', { Connectivity: conn, Battery: ['Up to 30 h (claimed)', 'Up to 40 h (claimed)'], Charging: ['USB-C'] }, COLORS, 'Colour'],
+                ['Wired Earphones', '🎧', 199, 1999, 'Wired in-ear earphones with mic and inline remote.', { Connector: ['3.5 mm', 'USB-C'], Mic: ['Yes'] }, COLORS, 'Colour'],
+                ['Bluetooth Speaker', '🔊', 799, 14999, 'Portable speaker with punchy bass and splash resistance.', { Connectivity: conn, Playtime: ['Up to 12 h (claimed)', 'Up to 24 h (claimed)'], Rating: ['IPX5', 'IPX7'] }, COLORS, 'Colour'],
+                ['Smartwatch', '⌚', 1299, 24999, 'Smartwatch with bright display, health tracking and notifications.', { Display: ['1.69"', '1.85"', '2.01" AMOLED'], Battery: ['Up to 7 days (claimed)', 'Up to 10 days (claimed)'], 'Water rating': ['IP67', '5 ATM'] }, COLORS, 'Strap colour'],
+                ['Fitness Band', '⌚', 999, 4999, 'Slim fitness band for steps, sleep and heart-rate tracking.', { Display: ['AMOLED', 'LCD'], Battery: ['Up to 14 days (claimed)'], 'Water rating': ['5 ATM'] }, COLORS, 'Strap colour'],
+                ['Laptop', '💻', 29999, 149999, 'Slim laptop for work, study and entertainment.', { RAM: ['8 GB', '16 GB', '32 GB'], Storage: ['256 GB SSD', '512 GB SSD', '1 TB SSD'], Display: ['14"', '15.6"', '16"'], OS: ['Windows 11', 'Windows 11', 'No OS'] }, [['Silver', 1], ['Grey', 1], ['Black', 1.02]], 'Colour'],
+                ['Tablet', '📲', 9999, 79999, 'Tablet with a large display for reading, video and note-taking.', { Display: ['10.1"', '11"', '12.4"'], Storage: ['64 GB', '128 GB', '256 GB'], Network: ['Wi-Fi', 'Wi-Fi + 4G'] }, [['Wi-Fi', 1], ['Wi-Fi + 4G', 1.15]], 'Variant'],
+                ['Smart TV', '📺', 12999, 129999, '4K smart TV with built-in streaming apps and voice remote.', { Panel: ['LED', 'QLED', 'OLED'], Resolution: ['Full HD', '4K UHD'], 'Operating system': ['Android TV', 'Google TV', 'Linux-based'] }, [['32"', 0.45], ['43"', 0.75], ['50"', 1], ['55"', 1.2], ['65"', 1.7]], 'Screen size'],
+                ['Power Bank', '🔋', 599, 3499, 'Portable power bank with multiple ports.', { Ports: ['USB-A + USB-C', '2× USB-A + USB-C'], Charging: ['18 W', '22.5 W', '45 W'] }, [['10000 mAh', 1], ['20000 mAh', 1.6]], 'Capacity'],
+                ['Fast Charger', '🔌', 399, 2999, 'Compact wall charger with safe multi-protocol fast charging.', { Ports: ['USB-C', 'USB-C + USB-A'], Protection: ['Over-heat & short-circuit'] }, [['33 W', 1], ['65 W', 1.7], ['100 W', 2.5]], 'Power'],
+                ['Mirrorless Camera', '📷', 29999, 149999, 'Interchangeable-lens camera for photos and 4K video.', { Sensor: ['APS-C', 'Full-frame'], Video: ['4K 30p', '4K 60p'] }, [['Body only', 1], ['With kit lens', 1.2]], 'Kit'],
+                ['Action Camera', '📷', 7999, 39999, 'Rugged action camera with stabilised video.', { Video: ['4K 30p', '4K 60p', '5.3K'], 'Water rating': ['Waterproof to 10 m'] }, COLORS.slice(0, 2), 'Colour'],
+                ['Gaming Console', '🎮', 24999, 54999, 'Home gaming console with controller and HDMI cable.', { Storage: ['512 GB', '825 GB', '1 TB'], Output: ['1080p', '4K'] }, [['Standard', 1], ['Bundle with 2 games', 1.15]], 'Edition'],
+                ['Wireless Mouse', '🖱️', 299, 3999, 'Ergonomic wireless mouse with adjustable DPI.', { Connectivity: ['2.4 GHz', 'Bluetooth + 2.4 GHz'], DPI: ['1600', '3200', '8000'] }, COLORS, 'Colour'],
+                ['Mechanical Keyboard', '⌨️', 999, 9999, 'Mechanical keyboard with tactile switches and backlight.', { Layout: ['Full-size', 'TKL', '75%'], Switch: ['Blue', 'Red', 'Brown'], Backlight: ['RGB', 'White'] }, [['Wired', 1], ['Wireless', 1.3]], 'Type'],
+                ['Monitor', '🖥️', 7999, 59999, 'Monitor with sharp colours and slim bezels.', { Panel: ['IPS', 'VA'], Resolution: ['Full HD', 'QHD', '4K'], 'Refresh rate': ['60 Hz', '75 Hz', '144 Hz'] }, [['24"', 1], ['27"', 1.45], ['32"', 1.9]], 'Size'],
+                ['Wi-Fi Router', '📡', 999, 12999, 'Dual-band router for stable home Wi-Fi.', { Standard: ['Wi-Fi 5', 'Wi-Fi 6'], Bands: ['Dual-band'], Ports: ['4× LAN'] }, [['AC1200', 1], ['AX1800', 1.5], ['AX3000', 2.2]], 'Class'],
+                ['Webcam', '📹', 999, 7999, 'Webcam with built-in mic for meetings and streaming.', { Resolution: ['1080p', '2K', '4K'], Connection: ['USB-A'] }, [['Standard', 1], ['With ring light', 1.25]], 'Version'],
+                ['External SSD', '💾', 3499, 19999, 'Pocket-sized external SSD with fast transfers.', { Interface: ['USB 3.2', 'USB-C'], Speed: ['Up to 500 MB/s (claimed)', 'Up to 1000 MB/s (claimed)'] }, [['512 GB', 1], ['1 TB', 1.7], ['2 TB', 3]], 'Capacity'],
+                ['Pen Drive', '💾', 299, 1999, 'Compact USB flash drive.', { Interface: ['USB 3.0', 'USB 3.2', 'USB-A + USB-C'] }, [['64 GB', 1], ['128 GB', 1.5], ['256 GB', 2.4]], 'Capacity'],
+                ['Smart Home Camera', '📷', 1499, 5999, 'Indoor Wi-Fi security camera with night vision.', { Resolution: ['1080p', '2K'], Features: ['Motion alerts', 'Two-way audio'] }, [['Single', 1], ['Pack of 2', 1.9]], 'Pack'],
+            ], { model: true });
+
+            const REST = ['Burger House', 'Oven Stories', 'Spice Route', 'Tandoor Tales', 'Wrap Station', 'Momo Mania', 'Biryani Bazaar', 'Crispy Hub', 'Taco Town', 'Noodle Nest'];
+            const SZ = [['Regular', 1], ['Large', 1.35]];
+            const veg = { Diet: ['Vegetarian'] }, nv = { Diet: ['Non-vegetarian'] };
+            const F = (name, emoji, lo, hi, desc, diet) => [name, emoji, lo, hi, desc, { ...diet, Serving: ['1 person'], Delivery: ['Usually 25–40 min'] }, SZ, 'Size'];
+            fromTypes('Food', REST, [
+                F('Cheeseburger Combo', '🍔', 189, 289, 'Grilled patty, cheese, lettuce and fries.', nv),
+                F('Chicken Burger', '🍔', 169, 269, 'Crispy chicken fillet in a toasted bun.', nv),
+                F('Veg Burger', '🍔', 129, 219, 'Crunchy veg patty with fresh veggies and sauce.', veg),
+                F('Double Patty Burger', '🍔', 229, 349, 'Two juicy patties stacked with cheese.', nv),
+                F('Pepperoni Pizza', '🍕', 299, 499, 'Mozzarella and pepperoni on a hand-tossed base.', nv),
+                F('Margherita Pizza', '🍕', 199, 349, 'Classic tomato, basil and mozzarella.', veg),
+                F('Farmhouse Pizza', '🍕', 279, 449, 'Loaded with capsicum, onion, mushroom and corn.', veg),
+                F('Paneer Tikka Pizza', '🍕', 299, 469, 'Tandoori paneer and onions on a cheesy base.', veg),
+                F('French Fries', '🍟', 79, 169, 'Golden crispy fries, lightly salted.', veg),
+                F('Peri Peri Fries', '🍟', 99, 189, 'Fries tossed in spicy peri peri seasoning.', veg),
+                F('Chicken Nuggets', '🍗', 129, 249, 'Crisp bite-size chicken nuggets with dip.', nv),
+                F('Fried Chicken Bucket', '🍗', 299, 649, 'Crispy fried chicken pieces, bucket pack.', nv),
+                F('Chicken Wings', '🍗', 199, 389, 'Saucy chicken wings with a spicy glaze.', nv),
+                F('Veg Wrap', '🌯', 119, 219, 'Soft tortilla filled with veggies and sauce.', veg),
+                F('Chicken Kathi Roll', '🌯', 149, 249, 'Spiced chicken rolled in flaky paratha.', nv),
+                F('Paneer Roll', '🌯', 139, 239, 'Masala paneer rolled in paratha.', veg),
+                F('Egg Roll', '🌯', 99, 189, 'Egg-wrapped paratha roll with onions and chutney.', nv),
+                F('Club Sandwich', '🥪', 149, 259, 'Triple-layer sandwich with veggies and cheese.', veg),
+                F('Grilled Sandwich', '🥪', 99, 189, 'Toasted sandwich with a cheesy filling.', veg),
+                F('Hot Dog', '🌭', 109, 199, 'Sausage in a soft bun with mustard and onions.', nv),
+                F('Steamed Momos', '🥟', 89, 189, 'Soft steamed dumplings with spicy chutney.', veg),
+                F('Fried Momos', '🥟', 99, 199, 'Crispy fried dumplings with dip.', veg),
+                F('Tandoori Momos', '🥟', 119, 229, 'Momos grilled with tandoori masala.', nv),
+                F('Chicken Biryani', '🍛', 199, 399, 'Fragrant basmati rice layered with spiced chicken.', nv),
+                F('Veg Biryani', '🍛', 159, 329, 'Aromatic rice cooked with vegetables and spices.', veg),
+                F('Butter Chicken Meal', '🍛', 249, 449, 'Creamy butter chicken with rice and naan.', nv),
+                F('Paneer Butter Masala Meal', '🍛', 219, 399, 'Rich paneer gravy with rice and naan.', veg),
+                F('Chole Bhature', '🫓', 99, 199, 'Spicy chickpeas with fluffy fried bhature.', veg),
+                F('Pav Bhaji', '🥘', 99, 189, 'Buttery mashed vegetable curry with soft pav.', veg),
+                F('Vada Pav', '🥔', 29, 79, 'Mumbai-style potato fritter in a pav.', veg),
+                F('Samosa (2 pcs)', '🥟', 29, 79, 'Crispy samosas with tangy chutney.', veg),
+                F('Hakka Noodles', '🍜', 119, 229, 'Wok-tossed noodles with crunchy veggies.', veg),
+                F('Schezwan Noodles', '🍜', 129, 249, 'Spicy schezwan-style noodles.', veg),
+                F('Veg Manchurian', '🥡', 129, 239, 'Fried veg balls in a tangy manchurian sauce.', veg),
+                F('Chilli Paneer', '🥡', 169, 289, 'Paneer cubes tossed in a spicy chilli sauce.', veg),
+                F('White Sauce Pasta', '🍝', 149, 279, 'Penne in a creamy white sauce.', veg),
+                F('Red Sauce Pasta', '🍝', 139, 259, 'Penne in a tangy tomato sauce.', veg),
+                F('Tacos (2 pcs)', '🌮', 119, 229, 'Crunchy tacos with fresh salsa and cheese.', veg),
+                F('Loaded Nachos', '🧀', 129, 249, 'Nachos with cheese sauce, salsa and jalapeños.', veg),
+                F('Chocolate Shake', '🥤', 109, 219, 'Thick chocolate milkshake.', veg),
+                F('Mango Shake', '🥤', 99, 199, 'Creamy mango milkshake.', veg),
+                F('Cold Coffee', '☕', 99, 199, 'Chilled coffee blended with milk and ice.', veg),
+                F('Lemon Iced Tea', '🍹', 79, 169, 'Refreshing iced tea with lemon.', veg),
+                F('Ice Cream Sundae', '🍨', 99, 219, 'Vanilla ice cream with chocolate sauce and nuts.', veg),
+                F('Brownie with Ice Cream', '🍫', 149, 269, 'Warm fudgy brownie with a scoop of ice cream.', veg),
+                F('Donut Box (6 pcs)', '🍩', 249, 449, 'Assorted glazed donuts.', veg),
+                F('Choco Lava Cake', '🍰', 79, 169, 'Warm cake with a molten chocolate centre.', veg),
+                F('Garlic Bread', '🥖', 89, 179, 'Toasted garlic bread with herbs and cheese.', veg),
+            ]);
+
+            const FBR = ['Stride', 'UrbanThread', 'Loom & Co', 'Threadly', 'Cotton Crest', 'Nomad Wear', 'Velvet Lane', 'StreetKart'];
+            const fb = (name, emoji, lo, hi, desc, specs, variants = COLORS, vk = 'Colour') => [name, emoji, lo, hi, desc, specs, variants, vk];
+            fromTypes('Fashion', FBR, [
+                fb('Cotton T-Shirt', '👕', 299, 1299, 'Soft everyday cotton tee.', { Fabric: ['100% cotton'], Fit: ['Regular', 'Slim'], Care: ['Machine wash'] }),
+                fb('Polo T-Shirt', '👕', 499, 1799, 'Classic polo with ribbed collar.', { Fabric: ['Cotton blend'], Fit: ['Regular', 'Slim'] }),
+                fb('Casual Shirt', '👔', 599, 2299, 'Easy casual shirt for everyday wear.', { Fabric: ['Cotton', 'Linen blend'], Fit: ['Regular', 'Slim'] }),
+                fb('Formal Shirt', '👔', 699, 2599, 'Crisp formal shirt for office wear.', { Fabric: ['Cotton blend'], Fit: ['Slim', 'Regular'] }),
+                fb('Slim Fit Jeans', '👖', 899, 3299, 'Stretch denim in a slim fit.', { Fabric: ['Stretch denim'], Fit: ['Slim'] }, [['Dark Blue', 1], ['Light Blue', 1], ['Black', 1]]),
+                fb('Chinos', '👖', 799, 2799, 'Smart-casual cotton chinos.', { Fabric: ['Cotton twill'], Fit: ['Slim', 'Regular'] }),
+                fb('Joggers', '👖', 599, 1899, 'Comfortable joggers with elastic cuffs.', { Fabric: ['Cotton fleece'], Fit: ['Relaxed'] }),
+                fb('Hoodie', '🧥', 799, 2999, 'Cosy fleece hoodie with front pocket.', { Fabric: ['Cotton fleece'], Fit: ['Regular'] }),
+                fb('Jacket', '🧥', 1299, 5999, 'Light jacket for cool weather.', { Fabric: ['Polyester', 'Denim'], Fit: ['Regular'] }),
+                fb('Kurta', '👘', 499, 2499, 'Straight-fit kurta for festive and daily wear.', { Fabric: ['Cotton', 'Rayon'], Fit: ['Straight'] }),
+                fb('Saree', '🥻', 799, 6999, 'Elegant saree with a matching blouse piece.', { Fabric: ['Silk blend', 'Georgette', 'Cotton'], Length: ['5.5 m + blouse piece'] }, COLORS, 'Colour'),
+                fb('Kurti', '👗', 399, 1999, 'Printed kurti for everyday style.', { Fabric: ['Rayon', 'Cotton'], Fit: ['A-line', 'Straight'] }),
+                fb('Dress', '👗', 799, 3999, 'Flowy dress for casual and party wear.', { Fabric: ['Crepe', 'Georgette'], Fit: ['A-line'] }),
+                fb('Leggings', '👖', 249, 999, 'Stretchable leggings for all-day comfort.', { Fabric: ['Cotton lycra'] }),
+                fb('Shorts', '🩳', 399, 1399, 'Easy shorts for summer and workouts.', { Fabric: ['Cotton', 'Dry-fit'] }),
+                fb('Track Suit', '🏃', 999, 3499, 'Matching track jacket and pants set.', { Fabric: ['Polyester blend'] }),
+                fb('Sneakers', '👟', 999, 5999, 'Everyday sneakers with cushioned sole.', { Upper: ['Mesh', 'Synthetic'], Closure: ['Lace-up'] }, [['Black', 1], ['White', 1], ['Grey', 1]]),
+                fb('Running Shoes', '👟', 1299, 6999, 'Lightweight running shoes for daily workouts.', { Upper: ['Mesh textile'], Closure: ['Lace-up'] }, [['Black', 1], ['Blue', 1], ['Grey', 1]]),
+                fb('Formal Shoes', '👞', 999, 4999, 'Classic formal shoes for office.', { Upper: ['Synthetic leather', 'Leather'], Closure: ['Lace-up', 'Slip-on'] }, [['Black', 1], ['Brown', 1]]),
+                fb('Sandals', '🩴', 399, 1999, 'Comfortable sandals for daily use.', { Sole: ['EVA', 'Rubber'] }),
+                fb('Heels', '👠', 699, 2999, 'Stylish heels for occasions.', { Heel: ['2 inch', '3 inch'] }, [['Black', 1], ['Beige', 1], ['Red', 1]]),
+                fb('Cap', '🧢', 199, 799, 'Adjustable cotton cap.', { Fabric: ['Cotton'] }),
+                fb('Backpack', '🎒', 599, 2999, 'Spacious backpack with laptop compartment.', { Capacity: ['25 L', '30 L', '35 L'], Material: ['Polyester'] }),
+                fb('Handbag', '👜', 699, 3499, 'Stylish handbag with zip closure.', { Material: ['Faux leather'] }),
+                fb('Wallet', '👛', 299, 1499, 'Slim wallet with card slots.', { Material: ['Faux leather', 'Leather'] }, [['Black', 1], ['Brown', 1], ['Tan', 1]]),
+                fb('Leather Belt', '🪢', 299, 1299, 'Reversible belt with metal buckle.', { Material: ['Faux leather', 'Leather'] }, [['Black', 1], ['Brown', 1]]),
+                fb('Sunglasses', '🕶️', 399, 2499, 'UV-protected sunglasses.', { Protection: ['UV400'], Frame: ['Plastic', 'Metal'] }, [['Black', 1], ['Brown', 1], ['Blue', 1]]),
+                fb('Wrist Watch', '⌚', 799, 5999, 'Analog wrist watch with a stylish dial.', { Strap: ['Leather', 'Metal', 'Silicone'], 'Water rating': ['30 m'] }, [['Black', 1], ['Silver', 1], ['Rose Gold', 1.05]]),
+                fb('Socks (Pack of 3)', '🧦', 149, 499, 'Soft breathable socks.', { Fabric: ['Cotton blend'] }, [['Black', 1], ['White', 1], ['Mixed', 1]]),
+                fb('Winter Scarf', '🧣', 249, 999, 'Warm woollen scarf.', { Fabric: ['Wool blend', 'Acrylic'] }),
+            ], { perVariant: 2 });
+
+            const BBR = ['GlowLab', 'ColorPop', 'PureLeaf', 'Velvet Skin', 'Aura Beauty', 'RoseMist', 'Herbline', 'DermaPure'];
+            const ml = (a, b) => [[a, 1], [b, 1.6]];
+            const SHADE = [['Nude', 1], ['Rose', 1], ['Berry', 1], ['Red', 1], ['Coral', 1]];
+            fromTypes('Beauty', BBR, [
+                ['Face Moisturizer', '🧴', 249, 999, 'Lightweight moisturizer for soft, hydrated skin.', { 'Skin type': ['All skin types', 'Normal to dry', 'Oily'] }, ml('50 ml', '100 ml'), 'Volume'],
+                ['Sunscreen SPF 50', '🧴', 299, 999, 'Broad-spectrum sunscreen with a light finish.', { 'Skin type': ['All skin types'], Finish: ['Non-greasy'] }, ml('50 g', '100 g'), 'Volume'],
+                ['Face Wash', '🧼', 149, 599, 'Gentle daily face wash.', { 'Skin type': ['Oily', 'Dry', 'All skin types'] }, ml('100 ml', '150 ml'), 'Volume'],
+                ['Vitamin C Serum', '🧪', 349, 1499, 'Brightening face serum with vitamin C.', { 'Skin type': ['All skin types'] }, ml('15 ml', '30 ml'), 'Volume'],
+                ['Face Toner', '🧴', 199, 799, 'Refreshing toner to prep skin.', { 'Skin type': ['All skin types'] }, ml('100 ml', '200 ml'), 'Volume'],
+                ['Sheet Mask (Pack of 5)', '🧖', 199, 699, 'Hydrating sheet masks.', { Pieces: ['5'] }, [['Hydrating', 1], ['Brightening', 1]], 'Type'],
+                ['Matte Lipstick', '💄', 249, 1299, 'Long-wear matte lipstick.', { Finish: ['Matte'] }, SHADE, 'Shade'],
+                ['Liquid Lipstick', '💄', 299, 1199, 'Smudge-resistant liquid lipstick.', { Finish: ['Matte', 'Glossy'] }, SHADE, 'Shade'],
+                ['Lip Balm', '💋', 99, 399, 'Moisturising lip balm.', { Form: ['Stick'] }, [['Cherry', 1], ['Mint', 1], ['Strawberry', 1]], 'Flavour'],
+                ['Kajal', '✏️', 99, 399, 'Smudge-proof kajal.', { Finish: ['Intense black'] }, [['Black', 1], ['Brown', 1]], 'Shade'],
+                ['Mascara', '👁️', 249, 999, 'Volumising mascara.', { Finish: ['Waterproof', 'Regular'] }, [['Black', 1], ['Brown', 1]], 'Shade'],
+                ['Eyeliner', '✒️', 149, 699, 'Precise liquid eyeliner.', { Finish: ['Waterproof'] }, [['Black', 1], ['Brown', 1]], 'Shade'],
+                ['Eyeshadow Palette', '🎨', 399, 1999, 'Multi-shade eyeshadow palette.', { Shades: ['9', '12', '18'] }, [['Warm', 1], ['Cool', 1], ['Neutral', 1]], 'Tone'],
+                ['Liquid Foundation', '🧴', 299, 1499, 'Medium-coverage foundation.', { Coverage: ['Medium', 'Full'] }, [['Fair', 1], ['Medium', 1], ['Dusky', 1]], 'Shade'],
+                ['Compact Powder', '🪞', 199, 999, 'Oil-control compact.', { Finish: ['Matte'] }, [['Fair', 1], ['Medium', 1], ['Dusky', 1]], 'Shade'],
+                ['Concealer', '🖌️', 249, 999, 'Creamy concealer for spots and dark circles.', { Coverage: ['High'] }, [['Light', 1], ['Medium', 1], ['Deep', 1]], 'Shade'],
+                ['Blush', '🌸', 249, 999, 'Silky blush for a natural flush.', { Finish: ['Matte', 'Shimmer'] }, SHADE, 'Shade'],
+                ['Nail Polish', '💅', 79, 399, 'Glossy nail colour.', { Volume: ['9 ml'] }, SHADE, 'Shade'],
+                ['Shampoo', '🧴', 149, 799, 'Gentle shampoo for healthy-looking hair.', { 'Hair type': ['All', 'Dry', 'Oily'] }, ml('200 ml', '340 ml'), 'Volume'],
+                ['Conditioner', '🧴', 149, 799, 'Smoothing conditioner.', { 'Hair type': ['All', 'Dry'] }, ml('200 ml', '340 ml'), 'Volume'],
+                ['Hair Oil', '🫙', 149, 699, 'Nourishing hair oil.', { Type: ['Coconut', 'Almond', 'Onion'] }, ml('100 ml', '200 ml'), 'Volume'],
+                ['Hair Serum', '🧴', 199, 899, 'Frizz-control hair serum.', { 'Hair type': ['All'] }, ml('50 ml', '100 ml'), 'Volume'],
+                ['Body Lotion', '🧴', 199, 799, 'Daily body lotion.', { 'Skin type': ['Dry', 'All'] }, ml('200 ml', '400 ml'), 'Volume'],
+                ['Perfume', '🌸', 299, 3999, 'Long-lasting fragrance.', { Family: ['Floral', 'Woody', 'Fresh', 'Oriental'] }, ml('50 ml', '100 ml'), 'Volume'],
+                ['Deodorant', '🧴', 149, 499, 'All-day freshness deodorant.', { Type: ['Spray'] }, ml('150 ml', '250 ml'), 'Volume'],
+                ['Makeup Brush Set', '🖌️', 299, 1499, 'Soft synthetic brush set.', { Pieces: ['8', '12', '15'] }, [['Standard', 1]], null],
+                ['Beard Oil', '🧔', 199, 699, 'Softening beard oil.', { Type: ['Cedarwood', 'Sandalwood'] }, [['30 ml', 1], ['60 ml', 1.6]], 'Volume'],
+            ]);
+
+            const HBR = ['Terra', 'HomeNest', 'CasaLuxe', 'KitchenKing', 'Urban Haven', 'CozyCorner'];
+            fromTypes('Home', HBR, [
+                ['Insulated Bottle', '🧃', 399, 1299, 'Double-wall insulated bottle.', { Material: ['Stainless steel'], Care: ['Hand wash'] }, [['500 ml', 1], ['750 ml', 1.2], ['1 L', 1.4]], 'Capacity'],
+                ['Lunch Box', '🍱', 299, 999, 'Leak-proof lunch box with compartments.', { Material: ['Stainless steel', 'BPA-free plastic'] }, [['2 containers', 1], ['3 containers', 1.3]], 'Set'],
+                ['Cookware Set', '🍳', 1299, 5999, 'Non-stick cookware set.', { Material: ['Aluminium non-stick'], Compatible: ['Gas', 'Induction + gas'] }, [['3 pcs', 1], ['5 pcs', 1.6]], 'Set'],
+                ['Non-stick Frying Pan', '🍳', 399, 1499, 'Durable non-stick pan.', { Material: ['Aluminium'] }, [['24 cm', 1], ['28 cm', 1.25]], 'Size'],
+                ['Pressure Cooker', '🍲', 899, 2999, 'Safety-lid pressure cooker.', { Material: ['Aluminium', 'Stainless steel'] }, [['3 L', 1], ['5 L', 1.3]], 'Capacity'],
+                ['Air Fryer', '🍟', 3499, 9999, 'Digital air fryer for low-oil cooking.', { Power: ['1400 W', '1500 W'], Controls: ['Digital'] }, [['4 L', 1], ['6 L', 1.35]], 'Capacity'],
+                ['Mixer Grinder', '🥤', 1999, 5999, 'Multi-jar mixer grinder.', { Power: ['500 W', '750 W'], Jars: ['3', '4'] }, [['Standard', 1]], null],
+                ['Electric Kettle', '🫖', 499, 1999, 'Auto cut-off electric kettle.', { Power: ['1500 W'] }, [['1 L', 1], ['1.5 L', 1.15], ['1.8 L', 1.25]], 'Capacity'],
+                ['Induction Cooktop', '🔥', 1499, 3999, 'Touch-control induction cooktop.', { Power: ['2000 W'] }, [['Standard', 1]], null],
+                ['Microwave Oven', '📦', 5999, 18999, 'Microwave for reheating and cooking.', { Type: ['Solo', 'Grill', 'Convection'] }, [['20 L', 1], ['28 L', 1.3]], 'Capacity'],
+                ['Vacuum Cleaner', '🧹', 2999, 14999, 'Powerful vacuum cleaner for home.', { Type: ['Bagless', 'Cordless'] }, [['Standard', 1]], null],
+                ['Table Lamp', '💡', 399, 1999, 'Modern table lamp.', { Bulb: ['LED'] }, [['Warm light', 1], ['Cool light', 1]], 'Light'],
+                ['LED Bulb (Pack of 4)', '💡', 199, 699, 'Energy-efficient LED bulbs.', { Wattage: ['9 W', '12 W'] }, [['Warm white', 1], ['Cool white', 1]], 'Colour temp'],
+                ['Cotton Bedsheet Set', '🛏️', 599, 2499, 'Soft cotton bedsheet with 2 pillow covers.', { Fabric: ['Cotton'] }, [['Single', 0.7], ['Double', 1], ['King', 1.3]], 'Size'],
+                ['Pillow (Pack of 2)', '🛏️', 399, 1499, 'Soft fibre pillows.', { Fill: ['Microfibre'] }, [['Standard', 1]], null],
+                ['Blanket', '🛏️', 699, 2999, 'Warm and soft blanket.', { Fabric: ['Fleece', 'Polyester'] }, [['Single', 0.8], ['Double', 1.2]], 'Size'],
+                ['Curtains (Pair)', '🪟', 499, 2499, 'Printed curtains with eyelet rings.', { Fabric: ['Polyester'] }, [['5 ft', 0.8], ['7 ft', 1], ['9 ft', 1.25]], 'Length'],
+                ['Towel Set', '🛁', 399, 1799, 'Absorbent cotton towels.', { Fabric: ['Cotton'] }, [['2 pcs', 1], ['4 pcs', 1.8]], 'Set'],
+                ['Wall Clock', '🕰️', 299, 1499, 'Silent sweep wall clock.', { Power: ['AA battery'] }, [['12 inch', 1], ['14 inch', 1.2]], 'Size'],
+                ['Photo Frame Set', '🖼️', 299, 1299, 'Wall photo frame set.', { Pieces: ['3', '5', '7'] }, [['Black', 1], ['Wood', 1.1]], 'Finish'],
+                ['Storage Box', '📦', 199, 999, 'Stackable storage box with lid.', { Material: ['Plastic'] }, [['20 L', 1], ['40 L', 1.5]], 'Capacity'],
+                ['Dinner Set', '🍽️', 999, 4999, 'Elegant dinner set.', { Material: ['Ceramic', 'Melamine'] }, [['18 pcs', 1], ['32 pcs', 1.6]], 'Set'],
+                ['Coffee Mug (Set of 4)', '☕', 299, 999, 'Ceramic coffee mugs.', { Material: ['Ceramic'] }, [['Plain', 1], ['Printed', 1.1]], 'Style'],
+                ['Plant Pot Set', '🪴', 249, 1299, 'Decorative planter pots.', { Material: ['Ceramic', 'Plastic'] }, [['Set of 2', 1], ['Set of 3', 1.4]], 'Set'],
+                ['Door Mat', '🚪', 149, 699, 'Anti-slip door mat.', { Material: ['Coir', 'Rubber'] }, [['Standard', 1]], null],
+                ['Cushion Covers (Pack of 5)', '🛋️', 299, 1299, 'Printed cushion covers.', { Size: ['16×16 inch'] }, [['Standard', 1]], null],
+                ['Steam Iron', '🧺', 799, 2999, 'Steam iron with non-stick soleplate.', { Power: ['1200 W', '1600 W'] }, [['Standard', 1]], null],
+                ['Ceiling Fan', '🌀', 1999, 5999, 'Energy-efficient ceiling fan.', { Sweep: ['1200 mm'], Speed: ['3-speed'] }, [['White', 1], ['Brown', 1]], 'Colour'],
+                ['Room Heater', '♨️', 1299, 4999, 'Compact room heater.', { Power: ['1000 W', '2000 W'] }, [['Standard', 1]], null],
+                ['Water Purifier', '🚰', 5999, 19999, 'RO + UV water purifier.', { Technology: ['RO + UV', 'RO + UV + TDS control'] }, [['7 L', 1], ['10 L', 1.15]], 'Capacity'],
+            ]);
+
+            const OBR = ['PlayPlus', 'FitMate', 'BookBay', 'PetPal', 'DriveSafe', 'NutriNest'];
+            fromTypes('Others', OBR, [
+                ['Notebook (Pack of 6)', '📓', 199, 599, 'Ruled notebooks.', { Pages: ['160', '200'] }, [['A4', 1.2], ['A5', 1]], 'Size'],
+                ['Gel Pen (Pack of 20)', '🖊️', 99, 349, 'Smooth-writing gel pens.', { Ink: ['Blue', 'Black', 'Assorted'] }, [['Standard', 1]], null],
+                ['Yoga Mat', '🧘', 399, 1499, 'Non-slip yoga mat.', { Thickness: ['6 mm', '8 mm', '10 mm'] }, COLORS.slice(0, 3), 'Colour'],
+                ['Dumbbell Set', '🏋️', 799, 3999, 'Adjustable dumbbell set.', { Material: ['Vinyl', 'Rubber'] }, [['10 kg', 1], ['20 kg', 1.7]], 'Weight'],
+                ['Cricket Bat', '🏏', 599, 4999, 'Willow cricket bat.', { Wood: ['Kashmir willow', 'English willow'] }, [['Short handle', 1], ['Full size', 1.1]], 'Size'],
+                ['Football', '⚽', 399, 1499, 'Stitched football.', { Size: ['5'] }, [['Standard', 1]], null],
+                ['Badminton Racket (Pair)', '🏸', 499, 2999, 'Lightweight badminton rackets.', { Material: ['Aluminium', 'Graphite'] }, [['With cover', 1]], null],
+                ['Skipping Rope', '🪢', 99, 399, 'Adjustable skipping rope.', { Length: ['Adjustable'] }, [['Standard', 1]], null],
+                ['Board Game', '🎲', 299, 1499, 'Family board game.', { Players: ['2–4', '2–6'], Age: ['6+', '8+'] }, [['Standard', 1]], null],
+                ['Building Blocks Set', '🧱', 399, 2499, 'Creative building block set.', { Age: ['5+', '6+'] }, [['250 pcs', 1], ['500 pcs', 1.7]], 'Pieces'],
+                ['Soft Toy', '🧸', 299, 1299, 'Cuddly soft toy.', { Material: ['Plush'] }, [['30 cm', 1], ['60 cm', 1.8]], 'Size'],
+                ['Remote Control Car', '🚗', 499, 2999, 'Rechargeable RC car.', { Age: ['6+'] }, [['Red', 1], ['Blue', 1]], 'Colour'],
+                ['Story Book Collection', '📚', 199, 899, 'Illustrated story books.', { Language: ['English', 'Hindi'] }, [['Set of 5', 1], ['Set of 10', 1.7]], 'Set'],
+                ['Colouring Kit', '🖍️', 149, 699, 'Crayons, sketch pens and drawing pad.', { Age: ['4+'] }, [['Standard', 1]], null],
+                ['Dog Food', '🐕', 399, 2499, 'Balanced dog food.', { Type: ['Dry', 'Wet'] }, [['1 kg', 1], ['3 kg', 2.6]], 'Pack'],
+                ['Cat Toy Set', '🐈', 149, 599, 'Interactive cat toys.', { Pieces: ['6', '10'] }, [['Standard', 1]], null],
+                ['Pet Leash & Collar', '🐕', 199, 899, 'Adjustable leash and collar set.', { Material: ['Nylon'] }, [['Small', 1], ['Medium', 1.1], ['Large', 1.2]], 'Size'],
+                ['Car Phone Holder', '🚗', 199, 899, 'Dashboard phone holder.', { Mount: ['Dashboard', 'Vent'] }, [['Standard', 1]], null],
+                ['Bike Helmet', '🪖', 699, 3499, 'ISI-style protective helmet.', { Type: ['Full-face', 'Open-face'] }, [['M', 1], ['L', 1], ['XL', 1.03]], 'Size'],
+                ['Tool Kit', '🧰', 499, 2999, 'Multi-purpose home tool kit.', { Pieces: ['40', '70', '110'] }, [['Standard', 1]], null],
+                ['Car Cleaning Kit', '🚗', 399, 1799, 'Microfibre cloths, wash and shine kit.', { Pieces: ['8', '12'] }, [['Standard', 1]], null],
+                ['Mixed Dry Fruits', '🥜', 299, 1499, 'Premium mixed dry fruits.', { Type: ['Almonds, cashews, raisins'] }, [['250 g', 1], ['500 g', 1.9]], 'Pack'],
+                ['Masala Tea', '🍵', 149, 599, 'Aromatic masala chai blend.', { Type: ['Loose leaf'] }, [['250 g', 1], ['500 g', 1.8]], 'Pack'],
+                ['Natural Honey', '🍯', 199, 699, 'Raw natural honey.', { Type: ['Multiflora'] }, [['250 g', 1], ['500 g', 1.8]], 'Pack'],
+                ['Protein Powder', '💪', 999, 4999, 'Whey protein powder.', { Flavour: ['Chocolate', 'Vanilla', 'Coffee'] }, [['500 g', 1], ['1 kg', 1.8]], 'Pack'],
+                ['Festive Gift Hamper', '🎁', 499, 3999, 'Curated gift hamper.', { Contents: ['Sweets, snacks and décor'] }, [['Standard', 1], ['Premium', 1.6]], 'Edition'],
+            ]);
+
+            return out;
+        }
+
+        const products = [...seed, ...buildCatalog()];
+
+        (function () {
+
+            const KEY_CUSTOM = 'shopsphere_custom_v1';
+            const KEY_IMAGES = 'shopsphere_images_v1';
+            const KEY_CART = 'shopsphere_cart_v1';
+            const PAGE = 24;
+
+            const $ = (s) => document.querySelector(s);
+            const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const fmt = (n) => Number(n).toLocaleString('en-IN');
+
+            const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+            const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { toast('Browser storage is full — remove some custom images.'); return false; } };
+
+            let custom = load(KEY_CUSTOM, []);
+            let images = load(KEY_IMAGES, {});
+            let cart = load(KEY_CART, {});
+            const state = { cat: 'All', q: '', sort: 'featured', min: 0, max: Infinity, shown: PAGE };
+
+            const allProducts = () => [...custom, ...products];
+            const byId = (id) => allProducts().find((p) => p.id === id);
+
+            function toast(msg) {
+                const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+                clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2200);
+            }
+
+            function thumb(p) {
+                return images[p.id] ? `<img src="${esc(images[p.id])}" alt="${esc(p.title)}" loading="lazy">` : `<span class="emoji">${esc(p.emoji || '📦')}</span>`;
+            }
+            const discount = (p) => (p.oldPrice > p.price ? Math.round((1 - p.price / p.oldPrice) * 100) : 0);
+
+            function filtered() {
+                const q = state.q.trim().toLowerCase();
+                let list = allProducts().filter((p) =>
+                    (state.cat === 'All' || p.category === state.cat) &&
+                    p.price >= state.min && p.price <= state.max &&
+                    (!q || `${p.title} ${p.brand} ${p.category} ${p.description || ''}`.toLowerCase().includes(q)));
+                if (state.sort === 'low') list.sort((a, b) => a.price - b.price);
+                if (state.sort === 'high') list.sort((a, b) => b.price - a.price);
+                if (state.sort === 'rating') list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                if (state.sort === 'discount') list.sort((a, b) => discount(b) - discount(a));
+                return list;
+            }
+
+            function card(p) {
+                const off = discount(p);
+                const isMine = p.id.startsWith('c');
+                return `<article class="card" data-action="open" data-id="${esc(p.id)}">
+    <div class="thumb">${thumb(p)}${off ? `<span class="badge">${off}% off</span>` : ''}${isMine ? '<span class="badge mine">Yours</span>' : ''}</div>
+    <div class="info">
+      <div class="brand">${esc(p.brand || p.category)}</div>
+      <h3>${esc(p.title)}</h3>
+      <div class="rate">${p.rating ? `★ ${p.rating} <span>(${fmt(p.reviews)})</span>` : '<span>New</span>'}</div>
+      <div class="price">₹${fmt(p.price)}${p.oldPrice > p.price ? `<s>₹${fmt(p.oldPrice)}</s>` : ''}</div>
+      <button class="btn" data-action="add" data-id="${esc(p.id)}" type="button">Add to cart</button>
+    </div></article>`;
+            }
+
+            function renderGrid() {
+                const list = filtered();
+                $('#count').textContent = `${fmt(list.length)} product${list.length === 1 ? '' : 's'}`;
+                $('#grid').innerHTML = list.length ? list.slice(0, state.shown).map(card).join('') : '<div class="empty">No products found. Try another search or filter.</div>';
+                $('#more').style.display = list.length > state.shown ? '' : 'none';
+            }
+
+            function renderChips() {
+                $('#chips').innerHTML = categories.map((c) => `<button class="chip ${c === state.cat ? 'on' : ''}" data-cat="${esc(c)}" type="button">${esc(c)}</button>`).join('');
+            }
+
+            function fileToDataURL(file, max = 640) {
+                return new Promise((resolve, reject) => {
+                    const fr = new FileReader();
+                    fr.onerror = reject;
+                    fr.onload = () => {
+                        const img = new Image();
+                        img.onerror = reject;
+                        img.onload = () => {
+                            const s = Math.min(1, max / Math.max(img.width, img.height));
+                            const c = document.createElement('canvas');
+                            c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+                            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                            resolve(c.toDataURL('image/jpeg', 0.82));
+                        };
+                        img.src = fr.result;
+                    };
+                    fr.readAsDataURL(file);
+                });
+            }
+
+            function openDetail(id) {
+                const p = byId(id); if (!p) return;
+                const specs = Object.entries(p.specs || {}).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('');
+                const off = discount(p);
+                $('#detail').innerHTML = `<div class="detail">
+    <div><div class="thumb">${thumb(p)}</div>
+      <div class="upload">📷 <strong>Use your own image</strong>
+        <input type="file" accept="image/*" data-upload="${esc(p.id)}">
+        ${images[p.id] ? `<button class="btn ghost" data-action="rmimg" data-id="${esc(p.id)}" type="button" style="margin-top:8px">Remove my image</button>` : ''}
+      </div></div>
+    <div>
+      <div class="brand">${esc(p.brand || '')} · ${esc(p.category)}</div>
+      <h2>${esc(p.title)}</h2>
+      <div class="rate">${p.rating ? `★ ${p.rating} <span>(${fmt(p.reviews)} reviews)</span>` : '<span>New listing</span>'}</div>
+      <div class="price">₹${fmt(p.price)} ${p.oldPrice > p.price ? `<s>₹${fmt(p.oldPrice)}</s> <span class="rate">${off}% off</span>` : ''}</div>
+      <p class="muted">${esc(p.description || '')}</p>
+      ${specs ? `<table>${specs}</table>` : ''}
+      <div class="row">
+        <button class="btn" data-action="add" data-id="${esc(p.id)}" type="button">Add to cart</button>
+        ${p.id.startsWith('c') ? `<button class="btn ghost" data-action="delete" data-id="${esc(p.id)}" type="button">Delete product</button>` : ''}
+        <button class="btn ghost" data-action="close" type="button">Close</button>
+      </div></div></div>`;
+                if (!$('#detail').open) $('#detail').showModal();
+            }
+
+            function cartTotals() {
+                let count = 0, total = 0;
+                for (const [id, q] of Object.entries(cart)) { const p = byId(id); if (p) { count += q; total += p.price * q; } }
+                return { count, total };
+            }
+            function renderCart() {
+                const rows = Object.entries(cart).map(([id, q]) => {
+                    const p = byId(id); if (!p) return '';
+                    return `<div class="ci"><div class="t">${images[id] ? `<img src="${esc(images[id])}" alt="">` : esc(p.emoji || '📦')}</div>
+      <div><div class="n">${esc(p.title)}</div><div class="muted">₹${fmt(p.price)}</div>
+        <div class="qty"><button data-action="dec" data-id="${esc(id)}" type="button">−</button><span>${q}</span><button data-action="inc" data-id="${esc(id)}" type="button">+</button></div></div>
+      <strong>₹${fmt(p.price * q)}</strong></div>`;
+                }).join('');
+                $('#cartItems').innerHTML = rows || '<p class="muted">Your cart is empty.</p>';
+                const { count, total } = cartTotals();
+                $('#cartCount').textContent = count;
+                $('#cartTotal').textContent = '₹' + fmt(total);
+            }
+            function setCart(id, qty) { if (qty <= 0) delete cart[id]; else cart[id] = qty; save(KEY_CART, cart); renderCart(); }
+            function toggleCart(open) { $('#cart').classList.toggle('open', open); $('#scrim').classList.toggle('on', open); }
+
+            document.addEventListener('click', (e) => {
+                const chip = e.target.closest('[data-cat]');
+                if (chip) { state.cat = chip.dataset.cat; state.shown = PAGE; renderChips(); renderGrid(); return; }
+                const el = e.target.closest('[data-action]');
+                if (!el) return;
+                const { action, id } = el.dataset;
+                if (action === 'add') { setCart(id, (cart[id] || 0) + 1); toast('Added to cart'); }
+                else if (action === 'open') openDetail(id);
+                else if (action === 'inc') setCart(id, (cart[id] || 0) + 1);
+                else if (action === 'dec') setCart(id, (cart[id] || 0) - 1);
+                else if (action === 'close') $('#detail').close();
+                else if (action === 'rmimg') { delete images[id]; save(KEY_IMAGES, images); renderGrid(); renderCart(); openDetail(id); }
+                else if (action === 'delete') {
+                    if (!confirm('Delete this product?')) return;
+                    custom = custom.filter((p) => p.id !== id); delete images[id]; delete cart[id];
+                    save(KEY_CUSTOM, custom); save(KEY_IMAGES, images); save(KEY_CART, cart);
+                    $('#detail').close(); renderGrid(); renderCart();
+                }
+            });
+
+            document.addEventListener('change', async (e) => {
+                const inp = e.target.closest('[data-upload]');
+                if (!inp || !inp.files[0]) return;
+                try {
+                    images[inp.dataset.upload] = await fileToDataURL(inp.files[0]);
+                    if (save(KEY_IMAGES, images)) { toast('Image saved'); renderGrid(); renderCart(); openDetail(inp.dataset.upload); }
+                } catch { toast('Could not read that image.'); }
+            });
+
+            $('#detail').addEventListener('click', (e) => { if (e.target === $('#detail')) $('#detail').close(); });
+            $('#q').addEventListener('input', (e) => { state.q = e.target.value; state.shown = PAGE; renderGrid(); });
+            $('#sort').addEventListener('change', (e) => { state.sort = e.target.value; state.shown = PAGE; renderGrid(); });
+            $('#price').addEventListener('change', (e) => { const [a, b] = e.target.value.split('-').map(Number); state.min = a; state.max = b; state.shown = PAGE; renderGrid(); });
+            $('#more').addEventListener('click', () => { state.shown += PAGE; renderGrid(); });
+            $('#openCart').addEventListener('click', () => toggleCart(true));
+            $('#closeCart').addEventListener('click', () => toggleCart(false));
+            $('#scrim').addEventListener('click', () => toggleCart(false));
+            $('#clearCart').addEventListener('click', () => { cart = {}; save(KEY_CART, cart); renderCart(); });
+            $('#checkout').addEventListener('click', () => toast('Demo only — connect a payment gateway to take real orders.'));
+
+            $('#addCat').innerHTML = categories.filter((c) => c !== 'All').map((c) => `<option>${esc(c)}</option>`).join('');
+            $('#openAdd').addEventListener('click', () => { $('#addForm').reset(); $('#addPreview').innerHTML = ''; $('#addDlg').showModal(); });
+            $('#addCancel').addEventListener('click', () => $('#addDlg').close());
+            $('#addForm').elements.image.addEventListener('change', async (e) => {
+                const f = e.target.files[0];
+                $('#addPreview').innerHTML = f ? `<img src="${await fileToDataURL(f, 300)}" alt="preview">` : '';
+            });
+            $('#addForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const f = e.target.elements;
+                const price = Math.round(Number(f.price.value));
+                const old = Math.round(Number(f.oldPrice.value)) || 0;
+                const id = 'c' + Date.now();
+                const emojiByCat = { Mobiles: '📱', Electronics: '🔌', Food: '🍽️', Fashion: '👕', Beauty: '💄', Home: '🏠', Others: '📦' };
+                const p = { id, title: f.title.value.trim(), brand: f.brand.value.trim(), category: f.category.value, price, oldPrice: old > price ? old : 0, rating: 0, reviews: 0, emoji: emojiByCat[f.category.value] || '📦', description: f.description.value.trim(), specs: { Added: 'By you' } };
+                if (f.image.files[0]) {
+                    try { images[id] = await fileToDataURL(f.image.files[0]); } catch { toast('Image could not be read; saved without it.'); }
+                }
+                custom.unshift(p);
+                if (save(KEY_CUSTOM, custom)) { save(KEY_IMAGES, images); $('#addDlg').close(); state.cat = 'All'; state.shown = PAGE; renderChips(); renderGrid(); toast('Product added'); }
+                else { custom.shift(); delete images[id]; }
+            });
+
+            renderChips(); renderGrid(); renderCart();
+
+        })();
+    </script>
+</body>
+
+</html>

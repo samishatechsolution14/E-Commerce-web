@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17110e" />
+    <meta name="description"
+        content="Discover handcrafted food, signature dishes and memorable dining at Spice Symphony." />
+    <title>Spice Symphony | Taste the Extraordinary</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <div class="announcement">
+        <span>✦</span> Fresh ingredients. Bold flavors. Unforgettable moments.
+        <span>✦</span>
+    </div>
+
+    <header class="header" id="home">
+        <nav class="navbar container">
+            <a href="#home" class="logo">
+                <span class="logo-icon">✳</span>
+                <span>Spice <b>Symphony</b></span>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"
+                aria-controls="navLinks">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="#home">Home</a>
+                <a href="#menu">Our Menu</a>
+                <a href="#story">Our Story</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#contact">Contact</a>
+                <a href="#reservation" class="nav-reserve">Book a Table ↗</a>
+            </div>
+
+            <button class="cart-trigger" id="openCart" aria-label="Open shopping cart">
+                <span>🛍</span>
+                <span class="cart-label">Cart</span>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-orb orb-one"></div>
+            <div class="hero-orb orb-two"></div>
+
+            <div class="hero-grid container">
+                <div class="hero-content">
+                    <div class="eyebrow reveal">
+                        <span class="eyebrow-line"></span>
+                        GOOD FOOD, GREAT MOOD
+                    </div>
+
+                    <h1 class="hero-title reveal">
+                        Every bite tells<br />
+                        a <span class="gradient-text">delicious</span> story<span class="title-dot">.</span>
+                    </h1>
+
+                    <p class="hero-description reveal">
+                        From our kitchen to your heart, discover bold flavors,
+                        fresh ingredients and food made with a little extra love.
+                    </p>
+
+                    <div class="hero-actions reveal">
+                        <a href="#menu" class="btn btn-primary">Explore Our Menu <span>↗</span></a>
+                        <a href="#reservation" class="btn btn-outline">Book Your Table</a>
+                    </div>
+
+                    <div class="hero-social-proof reveal">
+                        <div class="avatar-stack">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces"
+                                alt="Customer" />
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces"
+                                alt="Customer" />
+                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=faces"
+                                alt="Customer" />
+                        </div>
+                        <div>
+                            <strong>2,000+ happy foodies</strong>
+                            <div class="rating-stars">★★★★★ <span>4.9/5 rating</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal">
+                    <div class="hero-image-frame">
+                        <img class="hero-image"
+                            src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000&h=1100&fit=crop"
+                            alt="Fresh gourmet salad with colorful ingredients" />
+                    </div>
+                    <div class="floating-card dish-card">
+                        <span class="dish-emoji">🥗</span>
+                        <div><strong>Chef's Special</strong><small>Fresh & delicious</small></div>
+                        <span class="heart">♥</span>
+                    </div>
+                    <div class="floating-card rating-card">
+                        <span class="rating-icon">★</span>
+                        <div><strong>4.9 / 5</strong><small>Loved by foodies</small></div>
+                    </div>
+                    <div class="hero-sticker">MADE WITH<br />LOVE ♡</div>
+                </div>
+            </div>
+
+            <div class="hero-bottom container">
+                <span>SCROLL TO DISCOVER</span>
+                <span class="scroll-line"></span>
+                <span>FRESHLY MADE EVERY DAY</span>
+            </div>
+        </section>
+
+        <section class="benefits section-pad">
+            <div class="container benefits-grid">
+                <article class="benefit">
+                    <span class="benefit-icon">🌿</span>
+                    <div>
+                        <h3>Fresh Ingredients</h3>
+                        <p>Picked with care, every day.</p>
+                    </div>
+                </article>
+                <article class="benefit">
+                    <span class="benefit-icon">👨‍🍳</span>
+                    <div>
+                        <h3>Expert Chefs</h3>
+                        <p>Passion in every recipe.</p>
+                    </div>
+                </article>
+                <article class="benefit">
+                    <span class="benefit-icon">⚡</span>
+                    <div>
+                        <h3>Quick Service</h3>
+                        <p>More flavor, less waiting.</p>
+                    </div>
+                </article>
+                <article class="benefit">
+                    <span class="benefit-icon">💛</span>
+                    <div>
+                        <h3>Made With Love</h3>
+                        <p>Good food, happy hearts.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="menu-section section-pad" id="menu">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow"><span class="eyebrow-line"></span> A LITTLE TASTE OF MAGIC</div>
+                        <h2>Food that makes<br />you say <span class="gradient-text">wow.</span></h2>
+                    </div>
+                    <p>Comfort food with a creative twist. Find your new favorite
+                        from our freshly prepared signature dishes.</p>
+                </div>
+
+                <div class="menu-toolbar">
+                    <div class="filter-list" id="menuFilters">
+                        <button class="filter-btn active" data-category="All">All Dishes</button>
+                        <button class="filter-btn" data-category="Starters">Starters</button>
+                        <button class="filter-btn" data-category="Mains">Main Course</button>
+                        <button class="filter-btn" data-category="Pizza">Pizza</button>
+                        <button class="filter-btn" data-category="Desserts">Desserts</button>
+                        <button class="filter-btn" data-category="Drinks">Drinks</button>
+                    </div>
+
+                    <label class="search-box">
+                        <span>⌕</span>
+                        <input type="search" id="menuSearch" placeholder="Find a dish..." aria-label="Search menu" />
+                    </label>
+                </div>
+
+                <div class="menu-grid" id="menuGrid" aria-live="polite"></div>
+
+                <div class="menu-footer">
+                    <p>Can't decide? Let your cravings choose. 😋</p>
+                    <button class="btn btn-outline" id="resetMenu">View All Dishes ↗</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="special-section section-pad" id="story">
+            <div class="container special-grid">
+                <div class="special-visual">
+                    <div class="special-image-main">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=900&h=1000&fit=crop"
+                            alt="Freshly baked artisan pizza" loading="lazy" />
+                    </div>
+                    <div class="special-image-small">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&h=500&fit=crop"
+                            alt="Delicious grilled food" loading="lazy" />
+                    </div>
+                    <div class="special-badge"><span>✳</span><strong>100%</strong><small>Made fresh</small></div>
+                </div>
+
+                <div class="special-content">
+                    <div class="eyebrow"><span class="eyebrow-line"></span> OUR LITTLE SECRET</div>
+                    <h2>More than food.<br />It's a <span class="gradient-text">feeling.</span></h2>
+                    <p class="special-description">
+                        We believe a great meal can turn an ordinary day into
+                        something special. That's why we bring together seasonal
+                        ingredients, bold ideas and a whole lot of heart.
+                    </p>
+                    <div class="story-points">
+                        <div><span>✓</span>
+                            <p><strong>Fresh, always</strong><small>Quality ingredients in every dish.</small></p>
+                        </div>
+                        <div><span>✓</span>
+                            <p><strong>Crafted with passion</strong><small>Recipes made to delight your senses.</small>
+                            </p>
+                        </div>
+                        <div><span>✓</span>
+                            <p><strong>Memories served daily</strong><small>Because food is better together.</small></p>
+                        </div>
+                    </div>
+                    <a href="#reservation" class="btn btn-primary">Come Say Hello <span>↗</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="container stats-grid">
+                <div class="stat"><strong>2K<span>+</span></strong>
+                    <p>Happy Foodies</p>
+                </div>
+                <div class="stat"><strong>50<span>+</span></strong>
+                    <p>Signature Dishes</p>
+                </div>
+                <div class="stat"><strong>4.9<span>/5</span></strong>
+                    <p>Customer Rating</p>
+                </div>
+                <div class="stat"><strong>100<span>%</span></strong>
+                    <p>Made With Love</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reviews-section section-pad" id="reviews">
+            <div class="container">
+                <div class="section-heading centered">
+                    <div class="eyebrow"><span class="eyebrow-line"></span> WORD ON THE STREET <span
+                            class="eyebrow-line"></span></div>
+                    <h2>Don't just take <span class="gradient-text">our word.</span></h2>
+                    <p>Good food travels fast. Here's what our guests have to say.</p>
+                </div>
+
+                <div class="reviews-grid">
+                    <article class="review-card">
+                        <div class="rating-stars">★★★★★</div>
+                        <p>"The flavors were incredible, the vibe was beautiful,
+                            and the dessert? Absolutely unforgettable!"</p>
+                        <div class="review-author">
+                            <div class="author-avatar">A</div>
+                            <div><strong>Ananya Sharma</strong><small>Food enthusiast</small></div><span
+                                class="quote-mark">“</span>
+                        </div>
+                    </article>
+                    <article class="review-card review-featured">
+                        <div class="rating-stars">★★★★★</div>
+                        <p>"Finally found a place that gets both taste and
+                            presentation right. This is officially our weekend spot!"</p>
+                        <div class="review-author">
+                            <div class="author-avatar">R</div>
+                            <div><strong>Rahul Mehta</strong><small>Regular guest</small></div><span
+                                class="quote-mark">“</span>
+                        </div>
+                    </article>
+                    <article class="review-card">
+                        <div class="rating-stars">★★★★★</div>
+                        <p>"Warm service, fresh ingredients and so many options.
+                            Every visit feels like a little celebration."</p>
+                        <div class="review-author">
+                            <div class="author-avatar">P</div>
+                            <div><strong>Priya Kapoor</strong><small>Happy customer</small></div><span
+                                class="quote-mark">“</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="reservation-section section-pad" id="reservation">
+            <div class="container reservation-grid">
+                <div class="reservation-copy">
+                    <div class="eyebrow"><span class="eyebrow-line"></span> YOUR TABLE IS WAITING</div>
+                    <h2>Good times<br />start with a <span class="gradient-text">booking.</span></h2>
+                    <p>Plan a date night, catch up with friends or celebrate
+                        something special. We'll save you a seat.</p>
+
+                    <div class="reservation-detail"><span>📍</span>
+                        <div><strong>Find Us</strong>
+                            <p>123 Food Street, New Delhi, India</p>
+                        </div>
+                    </div>
+                    <div class="reservation-detail"><span>🕒</span>
+                        <div><strong>Opening Hours</strong>
+                            <p>Mon–Sun · 11:00 AM – 11:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="reservation-detail"><span>☎</span>
+                        <div><strong>Call Us</strong>
+                            <p>+91 98765 43210</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="reservation-form" id="reservationForm">
+                    <div class="form-heading"><span>✳</span>
+                        <div>
+                            <h3>Reserve your table</h3>
+                            <p>Just a few details and you're all set.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Full Name
+                            <input type="text" name="name" placeholder="Your name" required minlength="2"
+                                autocomplete="name" />
+                        </label>
+                        <label>Phone Number
+                            <input type="tel" name="phone" placeholder="Your phone number" required minlength="10"
+                                autocomplete="tel" />
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Date
+                            <input type="date" name="date" id="reservationDate" required />
+                        </label>
+                        <label>Time
+                            <select name="time" required>
+                                <option value="">Select time</option>
+                                <option>11:00 AM</option>
+                                <option>12:00 PM</option>
+                                <option>01:00 PM</option>
+                                <option>02:00 PM</option>
+                                <option>03:00 PM</option>
+                                <option>04:00 PM</option>
+                                <option>05:00 PM</option>
+                                <option>06:00 PM</option>
+                                <option>07:00 PM</option>
+                                <option>08:00 PM</option>
+                                <option>09:00 PM</option>
+                                <option>10:00 PM</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <label>Number of Guests
+                        <select name="guests" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5 Guests</option>
+                            <option value="6">6 Guests</option>
+                            <option value="7+">7+ Guests</option>
+                        </select>
+                    </label>
+
+                    <label>Special Requests <span class="optional">(optional)</span>
+                        <textarea name="requests" rows="3"
+                            placeholder="Birthday, window seat, dietary preferences..."></textarea>
+                    </label>
+
+                    <button class="btn btn-primary submit-btn" type="submit">Request Reservation <span>↗</span></button>
+                    <p class="form-note">Demo project: reservations are saved in your browser only.</p>
+                </form>
+            </div>
+        </section>
+
+        <section class="newsletter-section">
+            <div class="container newsletter-inner">
+                <div>
+                    <div class="eyebrow">A LITTLE SOMETHING EXTRA</div>
+                    <h2>Good taste. Great updates.</h2>
+                    <p>Get special offers and tasty news from our kitchen.</p>
+                </div>
+                <form id="newsletterForm" class="newsletter-form">
+                    <label class="sr-only" for="newsletterEmail">Email address</label>
+                    <input type="email" id="newsletterEmail" placeholder="Enter your email address" required />
+                    <button class="btn btn-primary" type="submit">Count Me In ↗</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contact">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#home" class="logo"><span class="logo-icon">✳</span><span>Spice <b>Symphony</b></span></a>
+                <p>Making everyday meals a little more magical, one delicious bite at a time.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram">ig</a>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook">f</a>
+                    <a href="https://www.youtube.com/" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a>
+                </div>
+            </div>
+            <div>
+                <h3>Explore</h3><a href="#home">Home</a><a href="#menu">Our Menu</a><a href="#story">Our Story</a><a
+                    href="#reviews">Reviews</a>
+            </div>
+            <div>
+                <h3>Visit Us</h3>
+                <p>123 Food Street</p>
+                <p>New Delhi, India</p>
+                <p>Mon–Sun: 11 AM–11 PM</p>
+            </div>
+            <div>
+                <h3>Say Hello</h3><a href="tel:+919876543210">+91 98765 43210</a><a
+                    href="mailto:hello@spicesymphony.example">hello@spicesymphony.example</a><a
+                    href="#reservation">Reserve a Table ↗</a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>© <span id="year"></span> Spice Symphony. Made with ♥ and a pinch of spice.</p><a href="#home">Back to
+                top ↑</a>
+        </div>
+    </footer>
+
+    <div class="overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+        <div class="cart-header">
+            <div>
+                <h2>Your Basket <span id="drawerCount">(0)</span></h2>
+                <p>Good choices taste even better.</p>
+            </div>
+            <button id="closeCart" class="icon-btn" aria-label="Close shopping cart">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-empty" id="cartEmpty"><span>🛍️</span>
+            <h3>Your basket is hungry!</h3>
+            <p>Add something delicious from our menu.</p><button class="btn btn-primary" id="emptyCartBrowse">Explore
+                Menu ↗</button>
+        </div>
+        <div class="cart-footer" id="cartFooter">
+            <div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">₹0</strong></div>
+            <p>Taxes and delivery, if applicable, are not included.</p>
+            <button class="btn btn-primary checkout-btn" id="checkoutBtn">Place Demo Order ↗</button>
+        </div>
+    </aside>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+</body>
+
+</html>
